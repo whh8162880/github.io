@@ -1,0 +1,377 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+/// <reference path="./com/youbt/rfreference.ts" />
+/// <reference path="./AppBase.ts" />
+var rf;
+(function (rf) {
+    // export var line;
+    var Main = /** @class */ (function (_super) {
+        __extends(Main, _super);
+        function Main() {
+            return _super.call(this) || this;
+        }
+        Main.prototype.init = function (canvas) {
+            _super.prototype.init.call(this, canvas);
+            if (undefined == rf.gl) {
+                return;
+            }
+            var perfix = "../assets/";
+            rf.ROOT_PERFIX = perfix;
+            // var matrix = new Matrix3D([-1.0938435201278621e-8,-0.968181073665619,-0.2502503693103784,0,-1.4972529544683223e-8,-0.2502503567352837,0.9681810250144678,0,-0.9999999403953552,1.4337268631142944e-8,-1.1758774204986801e-8,0,6.187005396895984e-8,1.6862283945083618,-0.09339626878499985,1]);
+            // var vs = matrix.decompose();
+            // matrix.invert();
+            // let amfEncode = new AMF3Encode();
+            // let amfDecode = new AMF3();
+            // amfEncode.writeObject(1000);
+            // let b = amfEncode.toUint8Array().buffer;
+            // amfDecode.setArrayBuffer(b);
+            // let re = amfDecode.readObject();
+            // gl.enable(gl.DEPTH_TEST);  
+            // gl.depthMask(true);
+            // gl.depthFunc(gl.LEQUAL);
+            // context3D.setDepthTest(true,gl.LEQUAL)
+            var camera = rf.ROOT.camera3D;
+            rf.scene.camera = camera;
+            var f = camera.originFar;
+            f = Math.sqrt(f * f / 3);
+            camera.setPos(f, f, f);
+            camera.lookat(rf.newVector3D(0, 0, 0));
+            new rf.TrackballControls(camera);
+            var sun = new rf.DirectionalLight();
+            // f = 1000 / Math.PI2;
+            // f = Math.sqrt(f*f / 3);
+            sun.setPos(200, 800, 200);
+            var v = rf.TEMP_VECTOR3D;
+            v[0] = v[1] = v[2] = 0;
+            sun.lookat(v);
+            rf.scene.sun = sun;
+            var g;
+            // let f = Math.sin(45 * DEGREES_TO_RADIANS) * camera.originFar / 2;
+            // let{x,y,z} = camera;
+            // let cos = Math.cos(45 * DEGREES_TO_RADIANS);
+            // let sin = Math.sin(45 * DEGREES_TO_RADIANS);
+            // x = f * sin * cos;
+            // y = f * sin * sin;
+            // z = f * cos;
+            // camera.setPos(f * sin * cos,f * sin * sin,f * cos);
+            // camera.z = f
+            // camera.y = f;
+            var w = 500;
+            var t = 2;
+            var tr = new rf.Trident(w, t);
+            rf.scene.addChild(tr);
+            rf.sp = tr;
+            // line.rotationX = 45;
+            // let line = new Line3D();
+            // line.clear();
+            // line.moveTo(-500,0,500,t);
+            // line.lineTo(500,0,500,t);
+            // line.lineTo(500,0,-500,t);
+            // line.lineTo(-500,0,-500,t);
+            // line.lineTo(-500,0,500,t);
+            // line.end();
+            // scene.addChild(line);
+            var variables = rf.vertex_mesh_variable;
+            var w_e = w * 1.1;
+            var m = new rf.PhongMaterial();
+            m.setData(undefined);
+            m.cull = 1029 /* BACK */;
+            // let geo = new BoxGeometry(variables).create(w,w,w)
+            var r = 40;
+            // m.diffTex = context3D.getTextureData("../assets/mesh/a10010m/diff.png");
+            m.diff = rf.newColor(0xAAAAAA);
+            var plane = new rf.PlaneGeometry(variables).create(w * 2, w * 2);
+            var mesh = new rf.Mesh(variables);
+            mesh.shadowTarget = true;
+            // mesh.shadowable = true;
+            mesh.rotationX = -90;
+            mesh.geometry = plane;
+            mesh.material = m;
+            rf.scene.addChild(mesh);
+            // plane = new PlaneGeometry(variables).create(w*2,w);
+            // mesh = new Mesh(variables);
+            // mesh.init(plane,m);
+            // mesh.setPos(w+80,0,0);
+            // scene.addChild(mesh);
+            // let box = new BoxGeometry(variables).create(w,w,w);
+            // mesh = new Mesh(variables);
+            // mesh.init(box,m);
+            // mesh.setPos(0,-110,0);
+            // scene.addChild(mesh);
+            var sphere = new rf.SphereGeometry(variables).create(r, r, 50);
+            mesh = new rf.Mesh(variables);
+            mesh.shadowable = true;
+            // mesh.shadowTarget = true;
+            mesh.geometry = sphere;
+            mesh.material = new rf.PhongMaterial();
+            mesh.material.setData(undefined);
+            mesh.material.diff = rf.newColor(0xAAAAAA);
+            mesh.setPos(0, 0, 0);
+            // scene.addChild(mesh);
+            // let torus = new TorusGeomerty(variables).create(r,r,w*.1375,w*.375);
+            // mesh = new Mesh(variables);
+            // mesh.init(torus,m);
+            // mesh.setPos(0,70,0);
+            // scene.addChild(mesh);
+            var kfmurl;
+            // kfmurl = "../assets/mesh/f1/";
+            kfmurl = perfix + "mesh/f3/";
+            // kfmurl = "../assets/mesh/a10010m/";
+            var kfmMesh = new rf.KFMMesh(new rf.PhongMaterial());
+            kfmMesh.setSca(100, 100, 100);
+            kfmMesh.shadowable = true;
+            // kfmMesh.shadowTarget = true;
+            // kfmMesh.load("../assets/mesh/a10010m/");
+            // kfmMesh.load("http://192.168.3.214/webgl/ss/mesh/a01100nan/")
+            kfmMesh.load(kfmurl);
+            // kfmMesh.load("../assets/mesh/f3/");
+            rf.scene.addChild(kfmMesh);
+            // kfmMesh = new KFMMesh(new PhongMaterial());
+            // kfmMesh.setSca(100,100,100);
+            // kfmMesh.shadowable = true;
+            // kfmMesh.load("../assets/mesh/a10010m/");
+            // kfmMesh.setPos(100,0,0);
+            // scene.addChild(kfmMesh);
+            // kfmMesh = new KFMMesh(new PhongMaterial());
+            // kfmMesh.setSca(100,100,100);
+            // kfmMesh.setPos(-200,0,0);
+            // kfmMesh.load("../assets/mesh/f1/");
+            // scene.addChild(kfmMesh);
+            // kfmMesh = new KFMMesh(new PhongMaterial());
+            // kfmMesh.setSca(100,100,100);
+            // kfmMesh.setPos(200,0,0);
+            // kfmMesh.load("../assets/mesh/f1/");
+            // scene.addChild(kfmMesh);
+            // kfmMesh = new KFMMesh(new PhongMaterial());
+            // kfmMesh.setSca(100,100,100);
+            // kfmMesh.setPos(0,0,300);
+            // kfmMesh.rotationY = 180;
+            // kfmMesh.load("../assets/mesh/f1/");
+            // scene.addChild(kfmMesh);
+            mesh = kfmMesh;
+            var gui = new dat.GUI();
+            var folder = gui.addFolder("mesh");
+            // folder.add(mesh,"refreshGUI");
+            var posFolder = folder.addFolder("position");
+            posFolder.add(mesh, "y", -200, 200).step(0.01);
+            var sunFolder = gui.addFolder("sun");
+            sunFolder.add(sun, "x", 0, 1000);
+            sunFolder.add(sun, "y", 0, 1000);
+            sunFolder.add(sun, "z", 0, 1000);
+            // posFolder.add(kfmMesh,"z",-1000,1000).step(0.01);
+            // var rotFolder = folder.addFolder("rotation");
+            // rotFolder.add(kfmMesh,"rotationX",-360,360);
+            // rotFolder.add(kfmMesh,"rotationY",-360,360);
+            // rotFolder.add(kfmMesh,"rotationZ",-360,360);
+            var profile = rf.singleton(rf.GUIProfile);
+            rf.tipContainer.addChild(profile);
+            // sp = new Sprite();
+            // sp.setPos(100,100,0);
+            // tipContainer.addChild(sp);
+            // g = sp.graphics;
+            // g.clear();
+            // g.drawRect(0,0,100,100,0xFFFFFF);
+            // g.end();
+            var image = new rf.Image();
+            image.renderer = new rf.BatchRenderer(image);
+            new rf.Scroll(image, 100, 100);
+            image.mouseEnabled = true;
+            // g = image.graphics;
+            // g.clear;
+            // g.drawRect(0,0,100,100,0xFF0000);
+            // g.drawRect(100,0,100,100,0xFFFF00);
+            // g.drawRect(200,0,100,100,0x00FFFF);
+            // g.drawRect(300,0,100,100,0x0000FF);
+            // g.drawRect(0,100,100,100,0xFFFF00);
+            // g.drawRect(0,200,100,100,0x00FFFF);
+            // g.drawRect(0,300,100,100,0x0000FF);
+            // g.drawRect(100,100,100,100,0x00FFFF);
+            // g.drawRect(100,200,100,100,0x0000FF);
+            // g.drawRect(100,300,100,100,0xFFFF00);
+            // g.drawRect(200,100,100,100,0xFFFF00);
+            // g.drawRect(200,200,100,100,0x00FFFF);
+            // g.drawRect(200,300,100,100,0x0000FF);
+            // g.drawRect(300,100,100,100,0x0000FF);
+            // g.drawRect(300,200,100,100,0xFFFF00);
+            // g.drawRect(300,300,100,100,0x00FF00);
+            // g.end();
+            image.setPos(100, 100, 0);
+            image.load(perfix + "mesh/f3/f3.png");
+            rf.tipContainer.addChild(image);
+            // particle_Perfix = "http://192.168.3.214/webgl/ss/particle/";
+            // particle_Texture_Perfix = "http://192.168.3.214/webgl/ss/tex/particle/";
+            // particle_Perfix = "assets/particle/";
+            // particle_Texture_Perfix = "assets/tex/particle/";
+            // let particle = new Particle();
+            // particle.setSca(100,100,100);
+            // particle.load("a");
+            // scene.addChild(particle);
+            // new AMF3Test().load("assets/test.dat");
+            // let geo = new TorusGeomerty(variables).create(r,r,w*.1375,w*.375);
+            // let geo = new SphereGeometry(variables).create(r,r,w*.5);
+            // let geo = new BoxGeometry(variables).create(w,w,w);
+            // let geo = new PlaneGeometry(variables).create(w,w);
+            // let qc = 10;
+            // let count = qc*qc;
+            // let tx = -(qc-1)/2 * w_e;
+            // let ty = -(qc-1)/2 * w_e;
+            // for(let i=0;i<count;i++){
+            //     let c =Math.floor(i / qc);
+            //     let p = i % qc;
+            //     let mesh = new Mesh(variables);
+            //     mesh.init(geo,m);
+            //     mesh.setPos(tx + p * w_e,ty + c * w_e,0);
+            //     scene.addChild(mesh);
+            // }
+            // mesh.rotationX = -90;
+            // let m  = new Matrix3D();
+            // m.appendRotation(45,Vector3D.Z_AXIS);
+            // m.appendTranslation(100,100,100);
+            // m.invert();
+            // m.invert();
+            // let s = new Sprite();
+            // s.renderer = new BatchRenderer(s);
+            // g = s.graphics;
+            // g.clear();
+            // g.drawCube(-100,-100,-100,200,200,200,0xFFFFFF);
+            // g.end();
+            // s.rotationX = 45
+            // ROOT.addChild(s);
+            // var m:Matrix3D = new Matrix3D();
+            // m.appendRotation(90,Vector3D.X_AXIS);
+            // m.appendRotation(90,Vector3D.Y_AXIS);
+            // m.appendRotation(90,Vector3D.Z_AXIS);
+            // let c = m.toString();
+            // let icon = new IconView();
+            // icon.x = 0;
+            // icon.y = 0;
+            // icon.resetSize(100,100);
+            // ROOT.addChild(icon);
+            // icon.setUrl("assets/ranger.png");
+            // let profile = singleton(GUIProfile);
+            // ROOT.addChild(profile);
+            // line = new Trident(200,4);
+            // ROOT.addChild(line);
+            // ROOT.camera2D.z = -1.5
+            // let s = new Sprite();
+            // s.renderer = new BatchRenderer(s);
+            // s.x = 100;
+            // g = s.graphics;
+            // g.clear();
+            // g.drawRect(0,0,100,100,0xFF0000)
+            // g.end();
+            // s.setPos(100,100,0)
+            // ROOT.addChild(s);
+            //p3d加载并显示
+            // let span = document.getElementById("fps");
+            // var t = new TextField();
+            // t.init();
+            // t.format.size = 30;
+            // t.format.init();
+            // t.y = 40;
+            // ROOT.addChild(t);
+            // Engine.dispatcher.addEventListener(EngineEvent.FPS_CHANGE,function (){
+            //     let str = `pixelRatio:${pixelRatio} fps:${Engine.fps} code:${Engine.code.toFixed(2)}`
+            //     span.innerHTML = str;
+            //     t.text = str;
+            // });
+            // let bmd = componentSource.bmd.canvas;
+            // let style = bmd.style;
+            // style.position="fixed";
+            // style.left = "500px";
+            // style.top = "0px";
+            // document.body.appendChild(bmd);
+            // canvas.id = "component";
+            // let div = document.getElementById("game");
+            // div.appendChild(bmd);
+            // canvas.style="position:absolutly;left:100px;top:100px";
+            // 
+            // let bw = 100;
+            // let ba = 1;
+            // let bb = 1;
+            // let bitmapData = new BitmapData(bw,bw,true,0xFFFFFFFF);
+            // bitmapData.fillRect(0,0,ba,bb,"rgba(255,255,255,255)")
+            // context3D.createTexture("test",bitmapData);
+            // document.body.appendChild(bitmapData.canvas);
+            // for(let i = 0;i<1;i++){
+            //     sp = new Sprite();
+            //     sp.x = Math.random() * stageWidth;
+            //     sp.y = Math.random() * stageHeight;
+            //     sp.alpha = Math.random() * 0.3 + 0.2;
+            //     g = sp.graphics;
+            //     g.clear();
+            //     g.drawRect(0,0,100,100,0xFFDD00);
+            //     g.end();
+            //     ROOT.addChild(sp);
+            // }
+            // g = ROOT.graphics;
+            // g.clear();
+            // g.drawRect(0,0,500,500,0xFF0000);
+            // g.end();
+            // Engine.removeTick(this);
+            // ROOT.update(10,10);
+            // this.bitmapDataTest();
+            // new MaxRectsBinPackTest();
+            // new WebglTest();
+            // new MaxRectsTest();
+            // new Dc_Texture();
+            // let _image:Image = new Image();
+            // _image.load("assets/ranger.png");
+            // ROOT.addChild(_image);
+            // t.html = true;
+            // t.x = 10;
+            // t.y = 10;
+            // let format = t.format;
+            // format.oy = 0;
+            // t.w = 200;
+            // t.wordWrap = true;
+            // t.format = new TextFormat();
+            // t.format.size = 30;
+            // t.format.oy = 3;
+            // t.format.italic = "italic";
+            // t.format.bold = "bold";
+            // t.format.gradient = [{color: 0xffff00}];
+            // t.format.gradient = [{color: 0xff0000, percent: 0}, {color: 0x00ff00, percent: 1}];
+            // t.format.stroke = {size: 2, color: 0x556600};
+            // t.format.shadow = {color: 0xffffff, blur: 4, offsetX: 10, offsetY: 10};
+            // t.format.init();
+            // t.text = "<font color='#FF0000'>你好</font>啊\n这是<font size='20'>一个<font color='#00FF00'>HTMLTEXT</font></font>";
+            // t.text = "你好啊\n这是一个HTMLTEXT";
+            // ROOT.addChild(t);
+            // format.size = 12;
+            // format.init();
+            // t.text = "FPS:60";
+            // t.text = "fps:60";
+            // t.text = "abc";
+            // Engine.dispatcher.addEventListener(EngineEvent.FPS_CHANGE,function (){
+            //     t.text =`fps:${Engine.fps}\ncode:${Engine.code.toFixed(2)}`
+            // });
+            // let icon = new IconView();
+            // icon.x = 100;
+            // icon.y = 100;
+            // icon.resetSize(100,100);
+            // ROOT.addChild(icon);
+            // icon.setUrl("assets/ranger.png");
+            // let panel = new Panelui();
+            // panel.x = 300;
+            // panel.y = 300;
+            // ROOT.addChild(panel);
+            // let panelutil = new PanelUtils();
+            // 潘华专用  
+            new rf.Pan_Test();
+        };
+        Main.prototype.onTest = function () {
+        };
+        return Main;
+    }(rf.AppBase));
+    rf.Main = Main;
+})(rf || (rf = {}));
+//# sourceMappingURL=Main.js.map
